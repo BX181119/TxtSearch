@@ -1,52 +1,26 @@
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<vector>
-using namespace std;
-void word_split(vector<string> WordVector);
-int main()
-{
-	//假设有两个测试文件
-	vector<string>WordVector;
-	word_split(WordVector);
-	vector<string>WordVector1;
-	word_split(WordVector1);
-	return 0;
-}
-void word_split(vector<string> WordVector)
-{
-	fstream fs;
-	char filename[20] = { 0 };
-	cout << "请输入打开的文件名:";
-	cin >> filename;
-	fs.open(filename);
-	cout << "打开成功" << filename << endl;
-	char buf[1024] = { 0 };
-	string line, word;
-	while (fs.getline(buf, 1024))
-	{
-		size_t pos;
-		line = buf;
-		pos = line.find_first_of(",.;:'?!()/\"\n");
-		while (pos != string::npos)
-		{
-			line.erase(pos, 1);
-			pos = line.find_first_of(",.;:'?!()/\"\n");
-		}
-		pos = line.find(" ");
-		while (pos != string::npos)
-		{
-			word = line.substr(0, pos);
-			WordVector.push_back(word);
-			line.erase(0, pos + 1);
-			pos = line.find(" ");
-		}
-	}
-		//vector<string>::iterator it;
-		//for (it = WordVector.begin(); it != WordVector.end(); it++)
-		//{
-		//	cout << (*it).c_str() << endl;
-		//}
-		//cout << "总的个数:" << WordVector.size();
-		fs.close();
+#include "txtSearch.h"
+#define N 10
+int main() {
+  vector<string> words[N];
+  int file_count = 0;
+  cout << "请输入文件数: ";
+  cin >> file_count;
+  //读文件, 将分词结果vector存入words数组
+  for (int i = 0; i < file_count; ++i) {
+    string filename;
+    cout << "请输入打开的文件名:";
+    cin >> filename;
+    words[i] = word_split(filename);
+  }
+  /*后续操作: 从words数组中取vector,对vector进行查找计数*/
+
+  /*words数组中取vector遍历单词实例
+  for (int i = 0; i < file_count; ++i) {
+    cout << "file " << i << ": " << endl;
+    for (const auto& word:words[i]) {
+      cout << word << endl;
+    }
+  }
+   */
+  return 0;
 }
