@@ -1,20 +1,21 @@
-#include "txtSearch.h"
+//#include "txtSearch.h"
+#include "MySort.h"
 #define N 10
 int main() {
   vector<string> words[N];
   int file_count = 0;
-  cout << "ÇëÊäÈëÎÄ¼şÊı: ";
+  cout << "è¯·è¾“å…¥æ–‡ä»¶æ•°: " << endl;
   cin >> file_count;
-  //¶ÁÎÄ¼ş, ½«·Ö´Ê½á¹ûvector´æÈëwordsÊı×é
+  //è¯»æ–‡ä»¶, å°†åˆ†è¯ç»“æœvectorå­˜å…¥wordsæ•°ç»„
   for (int i = 0; i < file_count; ++i) {
     string filename;
-    cout << "ÇëÊäÈë´ò¿ªµÄÎÄ¼şÃû:";
+    cout << "è¯·è¾“å…¥æ‰“å¼€çš„æ–‡ä»¶å:" << endl;
     cin >> filename;
     words[i] = word_split(filename);
   }
-  /*ºóĞø²Ù×÷: ´ÓwordsÊı×éÖĞÈ¡vector,¶Ôvector½øĞĞ²éÕÒ¼ÆÊı*/
+  /*åç»­æ“ä½œ: ä»wordsæ•°ç»„ä¸­å–vector,å¯¹vectorè¿›è¡ŒæŸ¥æ‰¾è®¡æ•°*/
 
-  /*wordsÊı×éÖĞÈ¡vector±éÀúµ¥´ÊÊµÀı
+  /*wordsæ•°ç»„ä¸­å–vectoréå†å•è¯å®ä¾‹
   for (int i = 0; i < file_count; ++i) {
     cout << "file " << i << ": " << endl;
     for (const auto& word:words[i]) {
@@ -22,5 +23,14 @@ int main() {
     }
   }
    */
+  IndexesTable = new int *[MAX_LEVEL];
+  for (int i = 0; i < MAX_LEVEL; i++)
+  {
+      IndexesTable[i] = new int[52];
+  }
+
+  MySort(words[0]);
+
+  delete[] IndexesTable;
   return 0;
 }
