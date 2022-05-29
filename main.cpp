@@ -1,36 +1,32 @@
-//#include "txtSearch.h"
-#include "MySort.h"
+#include "txtSearch.h"
+
 #define N 10
 int main() {
-  vector<string> words[N];
-  int file_count = 0;
-  cout << "请输入文件数: " << endl;
-  cin >> file_count;
-  //读文件, 将分词结果vector存入words数组
-  for (int i = 0; i < file_count; ++i) {
-    string filename;
-    cout << "请输入打开的文件名:" << endl;
-    cin >> filename;
-    words[i] = word_split(filename);
-  }
-  /*后续操作: 从words数组中取vector,对vector进行查找计数*/
+  vector<string> file_words[N];
+  vector<string> filenames =  {"test.txt", "tale.txt"};
 
-  /*words数组中取vector遍历单词实例
-  for (int i = 0; i < file_count; ++i) {
-    cout << "file " << i << ": " << endl;
-    for (const auto& word:words[i]) {
-      cout << word << endl;
+  for (int i = 0; i < filenames.size(); ++i) {
+    file_words[i] = word_split(filenames[i]);
+  }
+
+  int solution;
+  cout << "选择解法: " << endl;
+  cout << "1. 排序+查找" << endl;
+  cout << "2. map" << endl;
+  cin >> solution;
+
+  int line_cnt;
+  cout << "请输入待查询单词(组合)数： " << endl;
+  cin >> line_cnt;
+
+  while (line_cnt--) {
+    string line;
+    cin >> line;
+    vector<string> words_to_search = split_str("+", line);
+    for (int i = 0; i < filenames.size(); ++i) {
+      cout << filenames[i] << ": ";
+      search_word(solution, file_words[i], words_to_search);
     }
   }
-   */
-  IndexesTable = new int *[MAX_LEVEL];
-  for (int i = 0; i < MAX_LEVEL; i++)
-  {
-      IndexesTable[i] = new int[52];
-  }
-
-  MySort(words[0]);
-
-  delete[] IndexesTable;
   return 0;
 }

@@ -1,5 +1,6 @@
 
 #include <algorithm>
+#include <random>
 #include "txtSearch.h"
 
 vector<string> word_split(const string &filename) {
@@ -26,3 +27,98 @@ vector<string> word_split(const string &filename) {
   fs.close();
   return WordVector;
 }
+void quick_sort(vector<string> &a, int low, int high) {
+  string low_str = a[low];
+  int i = low, j = high;
+  while (i < j) {
+    while (i < j && a[j] >= low_str) j--;
+    if (i < j) a[i++] = a[j];
+    while (i < j && a[i] <= low_str) i++;
+    if (i < j) a[j--] = a[i];
+  }
+  a[i] = low_str;
+  if (low < i - 1) quick_sort(a, low, i - 1);
+  if (i + 1 < high) quick_sort(a, i + 1, high);
+}
+void quick_sort_triple_partition(vector<string> &a, int low, int high) {
+  if (high <= low) return;
+  int lt = low, i = low + 1, gt = high;
+  string word = a[low];
+  while (i <= gt) {
+    if (a[i] < word) {
+      string temp = a[lt];
+      a[lt] = a[i];
+      a[i] = temp;
+      lt += 1;
+      i += 1;
+    } else if (a[i] > word) {
+      string temp = a[gt];
+      a[gt] = a[i];
+      a[i] = temp;
+      gt -= 1;
+    } else {
+      i++;
+    }
+    quick_sort_triple_partition(a, low, lt - 1);
+    quick_sort_triple_partition(a, gt + 1, high);
+  }
+}
+int binary_search(const vector<string> &a, const string &key) {
+  int low = 0, high = a.size() - 1;
+  while (low <= high) {
+    int mid = (low + high) / 2;
+    if (a[mid] == key) return mid;
+    if (a[mid] < key) low = mid + 1;
+    else high = mid - 1;
+  }
+  return -1;
+}
+int count_words(const vector<string> &a, const string &key) {
+  int pos = binary_search(a, key);
+  if (pos == -1) return 0;
+  int count = 1;
+  int i = pos, j = pos;
+  while (a[--i] == key) count++;
+  while (a[++j] == key) count++;
+  return count;
+}
+int count_map(map<string, int> &a, const string &key) {
+  if (a.find(key) == a.end()) return 0;
+  return a[key];
+}
+map<string, int> word_to_map(const vector<string> &vector) {
+  map<string, int> words_pair;
+  for (const auto &word : vector) {
+    if (words_pair.find(word) == words_pair.end()) {
+      words_pair.insert({word, 1});
+    } else {
+      words_pair[word] += 1;
+    }
+  }
+  return words_pair;
+}
+vector<string> split_str(const string &delimeter, string line) {
+  size_t pos;
+  vector<string> splited;
+  while ((pos = line.find(delimeter)) != string::npos) {
+    splited.push_back(line.substr(0, pos));
+    line.erase(0, pos + delimeter.length());
+  }
+  splited.push_back(line);
+  return splited;
+}
+void search_word(int solution, vector<string>& words, vector<string> words_to_search) {
+  for (int i = 0; i < words_to_search.size(); ++i) {
+    if (solution == 0) {
+      shuffle(words.begin(), words.end(), std::mt19937(std::random_device()()));
+      quick_sort(words, 0, words.size() - 1);
+      cout << count_words(words, words_to_search[i]);
+    } else {
+      map<string, int> word_map = word_to_map(words);
+      cout << count_map(word_map, words_to_search[i]);
+    }
+    if (i == words_to_search.size() - 1) cout << endl;
+    else cout << "+";
+  }
+}
+
