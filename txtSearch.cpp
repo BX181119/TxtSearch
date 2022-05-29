@@ -23,6 +23,7 @@ vector<string> word_to_vector(const string &filename) {
       line.erase(0, pos + 1);
       pos = line.find_first_of(" \t");
     }
+    WordVector.push_back(line);
   }
   fs.close();
   return WordVector;
