@@ -3,16 +3,17 @@
 #define N 10
 int main() {
   vector<string> file_words[N];
-  vector<string> filenames =  {"test.txt", "tale.txt"};
+  vector<string> filenames =  {"test.txt", "tale.txt", "leipzig100k.txt"};
 
   for (int i = 0; i < filenames.size(); ++i) {
-    file_words[i] = word_split(filenames[i]);
+    file_words[i] = word_to_vector(filenames[i]);
   }
 
   int solution;
   cout << "选择解法: " << endl;
   cout << "1. 排序+查找" << endl;
   cout << "2. map" << endl;
+  cout << "3. 字典树" << endl;
   cin >> solution;
 
   int line_cnt;

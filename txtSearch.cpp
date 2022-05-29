@@ -3,7 +3,7 @@
 #include <random>
 #include "txtSearch.h"
 
-vector<string> word_split(const string &filename) {
+vector<string> word_to_vector(const string &filename) {
   fstream fs;
   fs.open(filename);
   vector<string> WordVector;
@@ -82,12 +82,12 @@ int count_words(const vector<string> &a, const string &key) {
   while (a[++j] == key) count++;
   return count;
 }
-int count_map(map<string, int> &a, const string &key) {
+int count_map(unordered_map<string, int> &a, const string &key) {
   if (a.find(key) == a.end()) return 0;
   return a[key];
 }
-map<string, int> word_to_map(const vector<string> &vector) {
-  map<string, int> words_pair;
+unordered_map<string, int> word_to_map(const vector<string> &vector) {
+  unordered_map<string, int> words_pair;
   for (const auto &word : vector) {
     if (words_pair.find(word) == words_pair.end()) {
       words_pair.insert({word, 1});
@@ -108,17 +108,35 @@ vector<string> split_str(const string &delimeter, string line) {
   return splited;
 }
 void search_word(int solution, vector<string>& words, vector<string> words_to_search) {
-  for (int i = 0; i < words_to_search.size(); ++i) {
-    if (solution == 0) {
-      shuffle(words.begin(), words.end(), std::mt19937(std::random_device()()));
-      quick_sort(words, 0, words.size() - 1);
+  if (solution == 1) {
+    shuffle(words.begin(), words.end(), std::mt19937(std::random_device()()));
+    quick_sort(words, 0, words.size() - 1);
+    for (int i = 0; i < words_to_search.size(); i++) {
       cout << count_words(words, words_to_search[i]);
-    } else {
-      map<string, int> word_map = word_to_map(words);
-      cout << count_map(word_map, words_to_search[i]);
+      if (i == words_to_search.size() - 1) cout << endl;
+      else cout << "+";
     }
-    if (i == words_to_search.size() - 1) cout << endl;
-    else cout << "+";
+  } else if (solution == 2) {
+    unordered_map<string, int> word_map = word_to_map(words);
+    for (int i = 0; i < words_to_search.size(); i++) {
+      cout << count_map(word_map, words_to_search[i]);
+      if (i == words_to_search.size() - 1) cout << endl;
+      else cout << "+";
+    }
+  } else {
+    Trie trie = word_to_trie(words);
+    for (int i = 0; i < words_to_search.size(); i++) {
+      cout << trie.find(words_to_search[i]);
+      if (i == words_to_search.size() - 1) cout << endl;
+      else cout << "+";
+    }
   }
+}
+Trie word_to_trie(const vector<string> &vector) {
+  Trie trie;
+  for (const auto &i : vector) {
+    trie.insert(i);
+  }
+  return trie;
 }
 
