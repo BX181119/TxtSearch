@@ -13,19 +13,17 @@ TrieNode::TrieNode() {
 }
 
 int Trie::find(const string &key) {
-  TrieNode *p = head;
+  TrieNode *p = root;
   for (auto c:key) {
     int index;
-    if ('A' < c && c < 'Z')  index = c - 'A' + 26;
-    else if ('a' < c && 'z' > c) index = c - 'a';
-    else continue;
+    index = c - 'a';
     if (!p->children[index]) return 0;
     p = p->children[index];
   }
   return p->count;
 }
 void Trie::insert(const string &key) {
-  TrieNode *p = head;
+  TrieNode *p = root;
   for (auto c:key) {
     int index;
     if ('A' < c && c < 'Z')  index = c - 'A' + 26;
@@ -37,5 +35,6 @@ void Trie::insert(const string &key) {
   p->count += 1;
 }
 Trie::Trie() {
-  head = new TrieNode;
+  root = new TrieNode;
 }
+

@@ -16,6 +16,7 @@ vector<string> word_to_vector(const string &filename) {
       return !std::isblank(c) && (std::ispunct(c) || (!std::isalpha(c) && !std::isdigit(c)));
     });
     line.erase(it, line.end());
+    for (auto &c : line) c = tolower(c);
     pos = line.find_first_of(" \t");
     while (pos != string::npos) {
       word = line.substr(0, pos);
@@ -29,6 +30,7 @@ vector<string> word_to_vector(const string &filename) {
   return WordVector;
 }
 void quick_sort(vector<string> &a, int low, int high) {
+  if (high < low + 100) insert_sort(a, low, high);
   string low_str = a[low];
   int i = low, j = high;
   while (i < j) {
@@ -41,27 +43,14 @@ void quick_sort(vector<string> &a, int low, int high) {
   if (low < i - 1) quick_sort(a, low, i - 1);
   if (i + 1 < high) quick_sort(a, i + 1, high);
 }
-void quick_sort_triple_partition(vector<string> &a, int low, int high) {
-  if (high <= low) return;
-  int lt = low, i = low + 1, gt = high;
-  string word = a[low];
-  while (i <= gt) {
-    if (a[i] < word) {
-      string temp = a[lt];
-      a[lt] = a[i];
-      a[i] = temp;
-      lt += 1;
-      i += 1;
-    } else if (a[i] > word) {
-      string temp = a[gt];
-      a[gt] = a[i];
-      a[i] = temp;
-      gt -= 1;
-    } else {
-      i++;
+void insert_sort(vector<string> &vector, int low, int high) {
+  for (int i = low + 1; i < high + 1; ++i) {
+    string e = vector[i];
+    int j;
+    for (j = i - 1; j >= 0 && e < vector[j]; --j) {
+      vector[j + 1] = vector[j];
     }
-    quick_sort_triple_partition(a, low, lt - 1);
-    quick_sort_triple_partition(a, gt + 1, high);
+    vector[j + 1] = e;
   }
 }
 int binary_search(const vector<string> &a, const string &key) {

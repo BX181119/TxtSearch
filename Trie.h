@@ -8,15 +8,14 @@ using std::string;
 
 class TrieNode {
  public:
-  TrieNode *children[52];
+  TrieNode *children[26];
   int count;
   TrieNode();
-
 };
 
 class Trie {
  private:
-  TrieNode *head;
+  TrieNode *root;
  public:
   Trie();
   void insert(const string &key);
